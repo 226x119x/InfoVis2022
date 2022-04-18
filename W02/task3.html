@@ -1,0 +1,68 @@
+<html>
+    <head>
+	<title>W02: Task2</title>
+  <meta charset="UTF-8">
+    </head>
+    <body>
+        <p>
+          area : <span id="span"></span>
+        </p>
+
+          <script src="vec3.js"></script>
+
+          <label for="number1">x1:</label>
+          <input type="number" id="number1" value="0" />
+
+          <label for="number2">y1:</label>
+          <input type="number" id="number2" value="0" />
+
+          <label for="number3">z1:</label>
+          <input type="number" id="number3" value="0" /><br>
+
+          <label for="number4">x2:</label>
+          <input type="number" id="number4" value="0" />
+
+          <label for="number5">y2:</label>
+          <input type="number" id="number5" value="0" />
+
+          <label for="number6">z2:</label>
+          <input type="number" id="number6" value="0" /><br>
+
+          <label for="number7">x3:</label>
+          <input type="number" id="number7" value="0" />
+
+          <label for="number8">y3:</label>
+          <input type="number" id="number8" value="0" />
+
+          <label for="number9">z3:</label>
+          <input type="number" id="number9" value="0" />
+
+          <input type="button" value="Done" onclick="enter()" />
+	        <script>
+                function enter() {
+                  const x1 = parseInt(document.getElementById("number1").value);
+                  const y1 = parseInt(document.getElementById("number2").value);
+                  const z1 = parseInt(document.getElementById("number3").value);
+
+                  const x2 = parseInt(document.getElementById("number4").value);
+                  const y2 = parseInt(document.getElementById("number5").value);
+                  const z2 = parseInt(document.getElementById("number6").value);
+
+                  const x3 = parseInt(document.getElementById("number7").value);
+                  const y3 = parseInt(document.getElementById("number8").value);
+                  const z3 = parseInt(document.getElementById("number9").value);
+
+                  const v1 = new Vec3( x1, y1, z1 );
+                  const v2 = new Vec3( x2, y2, z2 );
+                  const v3 = new Vec3( x3, y3, z3 );
+
+                  const v12 = v2.sub( v1 ); //ベクトル
+                  const v13 = v3.sub( v1 ); // ベクトル
+
+                  const area = (v12.cross( v13 )).length()/2
+
+                  document.getElementById("span").textContent = area;
+                }
+          </script>
+    </body>
+</html>

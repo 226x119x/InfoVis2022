@@ -1,0 +1,35 @@
+<html>
+    <head>
+	<title>W02: Task2</title>
+  <meta charset="UTF-8">
+    </head>
+    <body>
+        <p>
+          min : <span id="span1"></span>
+          mid : <span id="span2"></span>
+          max : <span id="span3"></span>
+        </p>
+          <script src="vec3.js"></script>
+          <input type="number" id="number1" value="0" />
+          <input type="number" id="number2" value="0" />
+          <input type="number" id="number3" value="0" />
+          <input type="button" value="Done" onclick="enter()" />
+	        <script>
+                function enter() {
+                  const x = parseInt(document.getElementById("number1").value);
+                  const y = parseInt(document.getElementById("number2").value);
+                  const z = parseInt(document.getElementById("number3").value);
+
+                  const v = new Vec3( x, y, z );
+
+                  const min = v.min(); // (output value)
+                  const mid = v.mid(); // (output value)
+                  const max = v.max(); // (output value)
+
+                  document.getElementById("span1").textContent = min;
+                  document.getElementById("span2").textContent = mid;
+                  document.getElementById("span3").textContent = max;
+                }
+          </script>
+    </body>
+</html>
