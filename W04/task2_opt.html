@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <title>W04: task2</title>
+    </head>
+    <body>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script>
+   var padding = 10;
+   var height = 20;
+	 var svg = d3.select("body").append("svg");
+	 d3.csv("https://covid19.mhlw.go.jp/newly_confirmed_cases_detail_weekly.csv", draw );
+	 function draw(data){
+
+       svg.selectAll("rect")
+          .data(data)
+          .enter()
+          .append("rect")
+          .attr("x", padding + 50)
+          .attr("y", function(d,i){ return padding + i * ( height + padding ); })
+          .attr("width", function(d){ return d.MaleUnder10 + d.FemaleUnder10; })
+          .attr("height", height)
+          //.style("fill", function(d){ return d.c; });
+
+        svg.selectAll("text")
+           .data(data)
+           .enter()
+           .append("text")
+           .text(function(d) { return d.Week; })
+           .attr("x", padding)
+     	     .attr("y", function(d,i){ return padding + i * ( height + padding ) + 15; })
+	 };
+	</script>
+    </body>
+</html>
