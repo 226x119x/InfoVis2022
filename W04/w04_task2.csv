@@ -1,6 +1,4 @@
-x,y,r,c
-20,20,10,red
-100,50,10,orange
-70,80,10,blue
-170,30,10,green
-150,70,10,yellow
+w,c
+100,red
+50,green
+80,blue
