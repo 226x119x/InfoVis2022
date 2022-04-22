@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>W04: Example 14</title>
+        <title>W04: task2</title>
     </head>
     <body>
 	<script src="https://d3js.org/d3.v4.min.js"></script>
@@ -8,8 +8,17 @@
    var padding = 10;
    var height = 20;
 	 var svg = d3.select("body").append("svg");
-	 d3.csv("https://226x119x.github.io/InfoVis2022/W04/w04_task2.csv", draw );
+	 //d3.csv("https://226x119x.github.io/InfoVis2022/W04/w04_task2.csv", draw );
+   d3.csv("w04_task2.csv", draw );
 	 function draw(data){
+       svg.selectAll("text")
+          .data(data)
+          .enter()
+          .append("text")
+          .text(function(d) { return d.l; })
+          .attr("x", 0)
+  	      .attr("y", function(d,i){ return padding + i * ( height + padding ); })
+
        svg.selectAll("rect")
           .data(data)
           .enter()

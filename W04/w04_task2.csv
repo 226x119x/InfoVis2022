@@ -1,4 +1,4 @@
-w,c
-100,red
-50,green
-80,blue
+l,w,c
+data1,100,red
+data2,50,green
+data3,80,blue

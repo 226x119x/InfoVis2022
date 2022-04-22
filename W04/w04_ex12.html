@@ -12,12 +12,16 @@
 	 var padding = 10;
 	 var height = 20;
 	 var svg = d3.select("body").append("svg");
-	 svg.selectAll("rect").data(data).enter().append("rect")
+	 svg.selectAll("rect")
+      .data(data)
+      .enter()
+      .append("rect")
 	    .attr("x", padding)
 	    .attr("y", function(d,i){ return padding + i * ( height + padding ); })
 	    .attr("width", function(d){ return d.width; })
 	    .attr("height", height)
 	    .style("fill", function(d){ return d.color; });
+      
 	</script>
     </body>
 </html>
