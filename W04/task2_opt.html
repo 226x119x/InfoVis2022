@@ -24,7 +24,6 @@
                       .range([0,1000]);
 
 	      d3.csv("https://226x119x.github.io/InfoVis2022/W04/import.csv", draw );
-        d3.csv("https://226x119x.github.io/InfoVis2022/W04/import.csv", addtext );
 	      function draw(data){
 
           svg.selectAll("rect")
@@ -44,21 +43,14 @@
              .text(function(d) { return d.country; })
              .attr("x", padding)
      	       .attr("y", function(d,i){ return padding + i * ( height + padding ) + 15; })
-
-	        };
-
-        function addtext(data){
-
-          svg.selectAll("text")
-             .data(data)
-             .enter()
              .append("text")
              .text(function(d) { return d.number; })
              .attr("x", padding + 150)
         	   .attr("y", function(d,i){ return padding + i * ( height + padding ) + 15; })
              .style("fill", function(d){ return d.numbercolor; });
-        };
-        
+
+	        };
+
       </script>
     </body>
 </html>
