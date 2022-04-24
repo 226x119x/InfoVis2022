@@ -26,7 +26,7 @@
           .data(data)
           .enter()
           .append("rect")
-          .attr("x", padding + 150)
+          .attr("x", padding + 120)
           .attr("y", function(d,i){ return padding + i * ( height + padding ); })
           .attr("width", function(d){ return scale(d.amount); })
           .attr("height", height)
