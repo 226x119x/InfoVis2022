@@ -42,7 +42,7 @@
              .append("text")
              .text(function(d) { return d.country; })
              .attr("x", padding)
-     	       .attr("y", function(d,i){ return padding + i * ( height + padding ) + 15; })
+     	       .attr("y", function(d,i){ return padding + i * ( height + padding ) + 15; });
 
           svg.append("text")
              .text(function(d) { return d.number; })
