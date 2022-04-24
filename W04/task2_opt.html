@@ -48,7 +48,7 @@
              .data(data)
              .enter()
              .append("text")
-             .text(function(d) { return d.amount; })
+             .text(function(d) { return d.number; })
              .attr("x", padding + 150)
         	   .attr("y", function(d,i){ return padding + i * ( height + padding ) + 15; })
              .style("fill", function(d){ return d.numbercolor; });
