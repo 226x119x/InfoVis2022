@@ -3,32 +3,65 @@
         <title>W04: task2</title>
     </head>
     <body>
-	<script src="https://d3js.org/d3.v4.min.js"></script>
-	<script>
-   var padding = 10;
-   var height = 20;
-	 var svg = d3.select("body").append("svg");
-	 d3.csv("https://226x119x.github.io/InfoVis2022/W04/w04_task2.csv", draw );
-	 function draw(data){
+      <p><font face="MS ゴシック" size="5">
+        日本における小麦の輸入額(上位五カ国)
+      </font></p>
 
-       svg.selectAll("rect")
-          .data(data)
-          .enter()
-          .append("rect")
-          .attr("x", padding + 50)
-          .attr("y", function(d,i){ return padding + i * ( height + padding ); })
-          .attr("width", function(d){ return d.w; })
-          .attr("height", height)
-          .style("fill", function(d){ return d.c; });
+	    <script src="https://d3js.org/d3.v4.min.js"></script>
+	    <script>
+        var w = 1200;
+        var h = 200;
 
-        svg.selectAll("text")
-           .data(data)
-           .enter()
-           .append("text")
-           .text(function(d) { return d.l; })
-           .attr("x", padding)
-     	     .attr("y", function(d,i){ return padding + i * ( height + padding ) + 15; })
-	 };
-	</script>
+        var padding = 10;
+        var height = 20;
+	      var svg = d3.select("body")
+                    .append("svg")
+                    .attr("width", w)
+                    .attr("height", h);
+
+        var scale = d3.scaleLinear()
+                      .domain([0,100000000])
+                      .range([0,1000]);
+
+	      d3.csv("https://226x119x.github.io/InfoVis2022/W04/w04_task2.csv", draw );
+	      function draw(data){
+
+          svg.selectAll("rect")
+             .data(data)
+             .enter()
+             .append("rect")
+             .attr("x", padding + 120)
+             .attr("y", function(d,i){ return padding + i * ( height + padding ); })
+             .attr("width", function(d){ return scale(d.amount); })
+             .attr("height", height)
+             .style("fill", function(d){ return d.color; });
+
+          svg.append("g")
+             .selectAll("text")
+             .data(data)
+             .enter()
+             .append("text")
+             .text(function(d) { return d.country; })
+             .attr("x", padding)
+     	       .attr("y", function(d,i){ return padding + i * ( height + padding ) + 15; })
+
+          svg.append("g")
+             .selectAll("text")
+             .data(data)
+             .enter()
+             .append("text")
+             .text(function(d) { return d.number; })
+             .attr("x", padding + 150)
+        	   .attr("y", function(d,i){ return padding + i * ( height + padding ) + 15; })
+             .attr("font-family", "sans-serif")
+             .attr("font-size", "10px")
+             .style("fill", function(d){ return d.numbercolor; });
+
+	        };
+      </script>
+
+      <p>
+        単位：(千円)
+      </p>
     </body>
 </html>

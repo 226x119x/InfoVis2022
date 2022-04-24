@@ -1,4 +1,6 @@
-l,w,c
-data1,100,red
-data2,50,green
-data3,80,blue
+country,amount,color,number,numbercolor
+アメリカ合衆国,76410757,blue,７６，４１０，７５７,white
+カナダ,59455330,red,５９，４５５，３３０,white
+オーストラリア,26431298,green,２６，４３１，２９８,white
+フランス,445300,yellow,４４５，３００,black
+ドイツ,12694,black,１２，６９４,black
