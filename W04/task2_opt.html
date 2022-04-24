@@ -8,7 +8,8 @@
    var padding = 10;
    var height = 20;
 	 var svg = d3.select("body").append("svg");
-	 d3.csv("https://covid19.mhlw.go.jp/newly_confirmed_cases_detail_weekly.csv", draw );
+	 //d3.csv("https://226x119x.github.io/InfoVis2022/W04/w04_task2.csv", draw );
+   d3.csv("import.csv", draw );
 	 function draw(data){
 
        svg.selectAll("rect")
@@ -17,7 +18,7 @@
           .append("rect")
           .attr("x", padding + 50)
           .attr("y", function(d,i){ return padding + i * ( height + padding ); })
-          .attr("width", function(d){ return d.MaleUnder10 + d.FemaleUnder10; })
+          .attr("width", function(d){ return d.a; })
           .attr("height", height)
           //.style("fill", function(d){ return d.c; });
 
@@ -25,7 +26,7 @@
            .data(data)
            .enter()
            .append("text")
-           .text(function(d) { return d.Week; })
+           .text(function(d) { return d.c; })
            .attr("x", padding)
      	     .attr("y", function(d,i){ return padding + i * ( height + padding ) + 15; })
 	 };
