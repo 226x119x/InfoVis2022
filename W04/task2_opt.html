@@ -5,9 +5,15 @@
     <body>
 	<script src="https://d3js.org/d3.v4.min.js"></script>
 	<script>
+  var w = 100;
+  var h = 500;
+
    var padding = 10;
    var height = 20;
-	 var svg = d3.select("body").append("svg");
+	 var svg = d3.select("body")]
+               .append("svg")
+               .attr("width", w)
+               .attr("height", h);
 	 d3.csv("https://226x119x.github.io/InfoVis2022/W04/import.csv", draw );
 	 function draw(data){
 
