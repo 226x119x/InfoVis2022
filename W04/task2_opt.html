@@ -3,43 +3,57 @@
         <title>W04: task2</title>
     </head>
     <body>
-	<script src="https://d3js.org/d3.v4.min.js"></script>
-	<script>
-   var w = 1200;
-   var h = 500;
+      <p>
+        日本における小麦の輸入額(上位五カ国)
+      </p>
 
-   var padding = 10;
-   var height = 20;
-	 var svg = d3.select("body")
-               .append("svg")
-               .attr("width", w)
-               .attr("height", h);
+	    <script src="https://d3js.org/d3.v4.min.js"></script>
+	    <script>
+        var w = 1200;
+        var h = 500;
 
-   var scale = d3.scaleLinear()
-                       .domain([0,100000000])
-                       .range([0,1000]);
+        var padding = 10;
+        var height = 20;
+	      var svg = d3.select("body")
+                    .append("svg")
+                    .attr("width", w)
+                    .attr("height", h);
 
-	 d3.csv("https://226x119x.github.io/InfoVis2022/W04/import.csv", draw );
-	 function draw(data){
+        var scale = d3.scaleLinear()
+                      .domain([0,100000000])
+                      .range([0,1000]);
 
-       svg.selectAll("rect")
-          .data(data)
-          .enter()
-          .append("rect")
-          .attr("x", padding + 120)
-          .attr("y", function(d,i){ return padding + i * ( height + padding ); })
-          .attr("width", function(d){ return scale(d.amount); })
-          .attr("height", height)
-          .style("fill", function(d){ return d.color; });
+	      d3.csv("https://226x119x.github.io/InfoVis2022/W04/import.csv", draw );
+	      function draw(data){
 
-        svg.selectAll("text")
-           .data(data)
-           .enter()
-           .append("text")
-           .text(function(d) { return d.country; })
-           .attr("x", padding)
-     	     .attr("y", function(d,i){ return padding + i * ( height + padding ) + 15; })
-	 };
-	</script>
+          svg.selectAll("rect")
+             .data(data)
+             .enter()
+             .append("rect")
+             .attr("x", padding + 120)
+             .attr("y", function(d,i){ return padding + i * ( height + padding ); })
+             .attr("width", function(d){ return scale(d.amount); })
+             .attr("height", height)
+             .style("fill", function(d){ return d.color; });
+
+          svg.selectAll("text")
+             .data(data)
+             .enter()
+             .append("text")
+             .text(function(d) { return d.country; })
+             .attr("x", padding)
+     	       .attr("y", function(d,i){ return padding + i * ( height + padding ) + 15; })
+
+          svg.selectAll("text")
+             .data(data)
+             .enter()
+             .append("text")
+             .text(function(d) { return d.amount; })
+             .attr("x", padding + 150)
+        	   .attr("y", function(d,i){ return padding + i * ( height + padding ) + 15; })
+             .style("fill", function(d){ return d.numbercolor; });
+
+	        };
+      </script>
     </body>
 </html>

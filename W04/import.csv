@@ -1,8 +1,6 @@
-country,amount,color
-アメリカ合衆国,76410757,blue
-カナダ,59455330,red
-オーストラリア,26431298,green
-フランス,445300,yellow
-ドイツ,12694,violet
-オランダ,4708,black
-イタリア,1291,black
+country,amount,color,numbercolor
+アメリカ合衆国,76410757,blue,white
+カナダ,59455330,red,white
+オーストラリア,26431298,green,white
+フランス,445300,yellow,black
+ドイツ,12694,black,black
