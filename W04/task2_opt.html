@@ -40,8 +40,7 @@
              .data(data)
              .enter()
              .append("text")
-             .text(function(d) { return d.country; })
-             .text(function(d) { return d.number; })
+             .text(function(d) { return d.country + " " + d.number; })
              .attr("x", padding)
      	       .attr("y", function(d,i){ return padding + i * ( height + padding ) + 15; })
 
