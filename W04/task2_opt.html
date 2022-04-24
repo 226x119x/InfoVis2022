@@ -5,7 +5,7 @@
     <body>
 	<script src="https://d3js.org/d3.v4.min.js"></script>
 	<script>
-   var w = 100;
+   var w = 200;
    var h = 500;
 
    var padding = 10;
@@ -16,6 +16,9 @@
                .attr("height", h);
 	 d3.csv("https://226x119x.github.io/InfoVis2022/W04/import.csv", draw );
 	 function draw(data){
+       var scale = d3.scale.liner()
+                           .domain([0,200000000])
+                           .range([0,200])
 
        svg.selectAll("rect")
           .data(data)
@@ -23,7 +26,7 @@
           .append("rect")
           .attr("x", padding + 50)
           .attr("y", function(d,i){ return padding + i * ( height + padding ); })
-          .attr("width", function(d){ return d.amount; })
+          .attr("width", function(d){ return scale(d.amount); })
           .attr("height", height)
           //.style("fill", function(d){ return d.c; });
 
