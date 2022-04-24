@@ -5,7 +5,7 @@
     <body>
 	<script src="https://d3js.org/d3.v4.min.js"></script>
 	<script>
-   var w = 2000;
+   var w = 1000;
    var h = 500;
 
    var padding = 10;
@@ -16,8 +16,8 @@
                .attr("height", h);
 
    var scale = d3.scaleLinear()
-                       .domain([0,200000000])
-                       .range([0,2000]);
+                       .domain([0,170000000])
+                       .range([0,1000]);
 
 	 d3.csv("https://226x119x.github.io/InfoVis2022/W04/import.csv", draw );
 	 function draw(data){
