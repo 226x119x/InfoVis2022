@@ -1,12 +1,12 @@
-d3.csv("https://vizlab-kobe-lecture.github.io/InfoVis2021/W04/data.csv")
+d3.csv("https://226x119x.github.io/InfoVis2022/W04/data.csv")
     .then( data => {
-        data.forEach( d => { d.x = +d.x; d.y = +d.y; });
+        data.forEach( d => { d.x = +d.x; d.y = +d.y; d.r = +d.r; });
 
         var config = {
             parent: '#drawing_region',
             width: 256,
             height: 256,
-            margin: {top:10, right:10, bottom:20, left:10}
+            margin: {top:30, right:30, bottom:30, left:30}
         };
 
         const scatter_plot = new ScatterPlot( config, data );
@@ -23,7 +23,7 @@ class ScatterPlot {
             parent: config.parent,
             width: config.width || 256,
             height: config.height || 256,
-            margin: config.margin || {top:10, right:10, bottom:10, left:10}
+            margin: config.margin || {top:30, right:30, bottom:30, left:30}
         }
         this.data = data;
         this.init();
@@ -46,7 +46,7 @@ class ScatterPlot {
             .range( [0, self.inner_width] );
 
         self.yscale = d3.scaleLinear()
-            .range( [0, self.inner_height] );
+            .range( [self.inner_height, 0] );
 
         self.xaxis = d3.axisBottom( self.xscale )
             .ticks(6);
@@ -55,10 +55,10 @@ class ScatterPlot {
             .ticks(6);
 
         self.xaxis_group = self.chart.append('g')
-            .attr('transform', `translate(${self.inner_width}, 0)`);
+            .attr('transform', `translate(0, ${self.inner_height})`);
 
         self.yaxis_group = self.chart.append('g')
-            .attr('transform', `translate(${self.inner_width}, 0)`);
+            .attr('transform', `translate(0, 0)`);
     }
 
     update() {
@@ -66,11 +66,13 @@ class ScatterPlot {
 
         const xmin = d3.min( self.data, d => d.x );
         const xmax = d3.max( self.data, d => d.x );
-        self.xscale.domain( [xmin, xmax] );
+        //self.xscale.domain( [xmin, xmax] );
+        self.xscale.domain( [0, xmax] );
 
         const ymin = d3.min( self.data, d => d.y );
         const ymax = d3.max( self.data, d => d.y );
-        self.yscale.domain( [ymin, ymax] );
+        //self.yscale.domain( [ymin, ymax] );
+        self.yscale.domain( [0, ymax] );
 
         self.render();
     }
