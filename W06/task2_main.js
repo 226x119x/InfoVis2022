@@ -6,7 +6,7 @@ d3.csv("https://226x119x.github.io/InfoVis2022/W04/data.csv")
             parent: '#drawing_region',
             width: 600,
             height: 300,
-            margin: {top:30, right:30, bottom:30, left:30}
+            margin: {top:70, right:70, bottom:70, left:70}
         };
 
         const scatter_plot = new ScatterPlot( config, data );
@@ -49,9 +49,7 @@ class ScatterPlot {
             .range( [self.inner_height, 0] );
 
         self.xaxis = d3.axisBottom( self.xscale )
-                       .ticks(17)
-                       .tickSize(10)
-                       .tickPadding(10);
+            .ticks(17);
 
         self.yaxis = d3.axisLeft( self.yscale )
             .ticks(8);
@@ -60,6 +58,9 @@ class ScatterPlot {
             .attr('transform', `translate(0, ${self.inner_height})`);
 
         self.yaxis_group = self.chart.append('g')
+            .attr('transform', `translate(0, 0)`);
+
+        self.label_text = self.chart.append('g')
             .attr('transform', `translate(0, 0)`);
     }
 
@@ -91,9 +92,71 @@ class ScatterPlot {
             .attr("r", d => d.r );
 
         self.xaxis_group
-            .call( self.xaxis );
+            .call( self.xaxis )
+            .append("text")
+            .attr("fill", "black")
+            .attr("x", self.inner_width / 2)
+            .attr("y", 35)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "10pt")
+            .attr("font-weight", "bold")
+            .text("X-label");
 
         self.yaxis_group
-            .call( self.yaxis );
+            .call( self.yaxis )
+            .append("text")
+            .attr("fill", "black")
+            .attr("x", -(self.inner_height / 2))
+            .attr("y", -35)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "10pt")
+            .attr("transform", "rotate(-90)")
+            .attr("font-weight", "bold")
+            .text("Y-label");
+
+        self.label_text
+            .append("text")
+            .attr("x", self.inner_width / 2)
+            .attr("y", -30)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "15pt")
+            .attr("font-weight", "bold")
+            .text("Scatter plot");
+
+        self.label_text
+            .append("text")
+            .attr("x", -40)
+            .attr("y", self.inner_height)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "8pt")
+            .attr("font-weight", "middle")
+            .text("ymin");
+
+        self.label_text
+            .append("text")
+            .attr("x", -40)
+            .attr("y", 0)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "8pt")
+            .attr("font-weight", "middle")
+            .text("ymax");
+
+        self.label_text
+            .append("text")
+            .attr("x", 0)
+            .attr("y", self.inner_height + 30)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "8pt")
+            .attr("font-weight", "middle")
+            .text("xmin");
+
+        self.label_text
+            .append("text")
+            .attr("x", self.inner_width)
+            .attr("y", self.inner_height + 30)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "8pt")
+            .attr("font-weight", "middle")
+            .text("xmax");
     }
 }
