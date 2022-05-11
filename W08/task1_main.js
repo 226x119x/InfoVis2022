@@ -9,8 +9,8 @@ d3.csv("https://226x119x.github.io/InfoVis2022/W08/w08_task1.csv")
             margin: {top:10, right:10, bottom:20, left:60}
         };
 
-        const scatter_plot = new BarChart( config, data );
-          scatter_plot.update();
+        const bar_chart = new BarChart( config, data );
+          bar_chart.update();
     })
     .catch( error => {
         console.log( error );
@@ -46,36 +46,39 @@ class BarChart {
           .range( [0, self.inner_width] );
 
       self.yscale = d3.scaleLinear()
-          .range( [self.inner_height, 0] );
+          .range( [0, self.inner_height] )
+          .paddingInner(0.1);
 
       self.xaxis = d3.axisBottom( self.xscale )
-          .ticks(17);
+          .ticks(5)
+          .tickSizeOuther(0);
 
       self.yaxis = d3.axisLeft( self.yscale )
-          .ticks(8);
+          .tickSizeOuther(0);
 
       self.xaxis_group = self.chart.append('g')
           .attr('transform', `translate(0, ${self.inner_height})`);
 
-      self.yaxis_group = self.chart.append('g')
-          .attr('transform', `translate(0, 0)`);
+      self.yaxis_group = self.chart.append('g');
+          //.attr('transform', `translate(0, 0)`);
 
-      self.label_text = self.chart.append('g')
-          .attr('transform', `translate(0, 0)`);
+      /*self.label_text = self.chart.append('g')
+          .attr('transform', `translate(0, 0)`);*/
   }
 
   update() {
         let self = this;
 
-        const xmin = d3.min( self.data, d => d.x );
-        const xmax = d3.max( self.data, d => d.x );
+        const xmin = d3.min( self.data, d => d.value );
+        const xmax = d3.max( self.data, d => d.value );
         //self.xscale.domain( [xmin, xmax] );
         self.xscale.domain( [0, xmax] );
 
-        const ymin = d3.min( self.data, d => d.y );
-        const ymax = d3.max( self.data, d => d.y );
+        //const ymin = d3.min( self.data, d => d.label );
+        //const ymax = d3.max( self.data, d => d.label );
         //self.yscale.domain( [ymin, ymax] );
-        self.yscale.domain( [0, ymax] );
+        self.yscale.domain( data.map(d => d.label) )
+                   .paddingInner(0.1);
 
         self.render();
   }
@@ -84,12 +87,12 @@ class BarChart {
       let self = this;
 
       self.chart.selectAll("rect")
-          .append("rect")
           .data(self.data)
           .enter()
+          .append("rect")
           .attr("x", 0)
           .attr("y", d => self.yscale( d.label ) )
-          .attr("width", d => self.yscale( d.label ) )
+          .attr("width", d => self.xscale( d.value ) )
           .attr("height", yscale.bandwidth() );
 
       self.xaxis_group
