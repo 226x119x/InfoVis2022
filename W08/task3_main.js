@@ -1,4 +1,4 @@
-d3.csv("https://226x119x.github.io/InfoVis2022/W08/w08_task3.csv")
+d3.csv("https://226x119x.github.io/InfoVis2022/W08/w08_task1.csv")
     .then( data => {
         data.forEach( d => { d.label = d.label; d.value = +d.value; d.color = d.color; });
 
@@ -68,7 +68,9 @@ class PieChart {
           .enter()
           .append("path")
           .attr('d', arc)
-          .attr("fill", color(self.data.color))
+          .attr("fill", function(d, i) {
+            return color(i);
+        })
           .attr('stroke', 'white')
           .style('stroke-width', '2px');
 
