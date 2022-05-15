@@ -1,17 +1,17 @@
 d3.csv("https://226x119x.github.io/InfoVis2022/W08/w08_task1.csv")
     .then( data => {
-        data.forEach( d => { d.label = d.label; d.value = +d.value; });
+        data.forEach( d => { d.label = d.label; d.value = +d.value;  d.color = d.color; });
 
         var config = {
             parent: '#drawing_region',
             width: 256,
-            height: 128,
-            radius: Math.min( width, height ) / 2,
+            height: 256,
+            radius: Math.min( 256, 256 ) / 2,
             margin: {top:10, right:10, bottom:20, left:60}
         };
 
-        const scatter_plot = new PieChart( config, data );
-          scatter_plot.update();
+        const pie_chart = new PieChart( config, data );
+          pie_chart.update();
     })
     .catch( error => {
         console.log( error );
@@ -24,7 +24,7 @@ class PieChart {
             parent: config.parent,
             width: config.width || 256,
             height: config.height || 256,
-            radius: config.radius || Math.min( width, height ) / 2,
+            radius: config.radius || Math.min( 256, 256 ) / 2,
             margin: config.margin || {top:10, right:10, bottom:10, left:10}
         }
         this.data = data;
@@ -40,18 +40,18 @@ class PieChart {
 
       self.chart = self.svg.append('g')
           //.attr('transform', `translate(${self.config.margin.left}, ${self.config.margin.top})`);
-          .attr('transform', `translate(${width/2}, ${height/2})`);
+          .attr('transform', `translate(${self.config.width/2}, ${self.config.height/2})`);
 
       self.inner_width = self.config.width - self.config.margin.left - self.config.margin.right;
       self.inner_height = self.config.height - self.config.margin.top - self.config.margin.bottom;
 
       self.xscale = d3.scaleLinear()
-          .range( [0, self.inner_width] );
+          .range( [0, self.inner_width] );//scaleいらなくね？
 
       self.yscale = d3.scaleLinear()
-          .range( [self.inner_height, 0] );
+          .range( [0, self.inner_height] );
 
-      self.xaxis = d3.axisBottom( self.xscale )
+      /*self.xaxis = d3.axisBottom( self.xscale )
           .ticks(17);
 
       self.yaxis = d3.axisLeft( self.yscale )
@@ -64,18 +64,18 @@ class PieChart {
           .attr('transform', `translate(0, 0)`);
 
       self.label_text = self.chart.append('g')
-          .attr('transform', `translate(0, 0)`);
+          .attr('transform', `translate(0, 0)`);*/
   }
 
   update() {
         let self = this;
 
-        const xmin = d3.min( self.data, d => d.x );
+        //const xmin = d3.min( self.data, d => d.x );
         const xmax = d3.max( self.data, d => d.x );
         //self.xscale.domain( [xmin, xmax] );
         self.xscale.domain( [0, xmax] );
 
-        const ymin = d3.min( self.data, d => d.y );
+        //const ymin = d3.min( self.data, d => d.y );
         const ymax = d3.max( self.data, d => d.y );
         //self.yscale.domain( [ymin, ymax] );
         self.yscale.domain( [0, ymax] );
@@ -87,25 +87,45 @@ class PieChart {
       let self = this;
 
       const pie = d3.pie()
-                    .value( d => d.value)
+                    .value( d => d.value );
 
       const arc = d3.arc()
-                    .innerRadius(0)
-                    .outerRadius(radius);
+                    .innerRadius(self.config.radius / 2)//ドーナツチャート
+                    .outerRadius(self.config.radius);
 
       self.chart.selectAll("pie")
-          .data(self.data)
+          .data( pie(self.data) )
           .enter()
           .append("path")
           .attr('d', arc)
-          .attr('fill', 'black')
+          .attr('fill', d => color(d.color) )
           .attr('stroke', 'white')
           .style('stroke-width', '2px');
 
-      self.xaxis_group
+      self.chart.selectAll('text')
+          .data(arc)
+          .enter()
+          .append('text')
+          .attr('transform', d => `translate(${arc.centroid(d)})`)
+          .style("text-anchor", "middle")
+          .style("font-size", 20)
+          .style('fill', 'black')
+          .text(d => d.label) // 表示するテキスト;
+
+      /*self.chart.selectAll('text')
+                .data(self.data)
+                .enter()
+                .append("text")
+                .attr("fill", "white")
+                .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+                .attr("dy", "5px")
+                .attr("text-anchor", "middle")
+                .text(function(d) { return d.label; });*/
+
+      /*self.xaxis_group
           .call( self.xaxis );
 
       self.yaxis_group
-          .call( self.yaxis );
+          .call( self.yaxis );*/
   }
 }

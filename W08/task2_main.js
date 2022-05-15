@@ -5,12 +5,12 @@ d3.csv("https://226x119x.github.io/InfoVis2022/W08/w08_task2.csv")
         var config = {
             parent: '#drawing_region',
             width: 256,
-            height: 128,
-            margin: {top:10, right:10, bottom:20, left:60}
+            height: 150,
+            margin: {top:20, right:20, bottom:20, left:30}
         };
 
-        const scatter_plot = new LineChart( config, data );
-          scatter_plot.update();
+        const line_chart = new LineChart( config, data );
+          line_chart.update();
     })
     .catch( error => {
         console.log( error );
@@ -48,11 +48,9 @@ class LineChart {
       self.yscale = d3.scaleLinear()
           .range( [self.inner_height, 0] );
 
-      self.xaxis = d3.axisBottom( self.xscale )
-          .ticks(17);
+      self.xaxis = d3.axisBottom( self.xscale );
 
-      self.yaxis = d3.axisLeft( self.yscale )
-          .ticks(8);
+      self.yaxis = d3.axisLeft( self.yscale );
 
       self.xaxis_group = self.chart.append('g')
           .attr('transform', `translate(0, ${self.inner_height})`);
@@ -67,12 +65,12 @@ class LineChart {
   update() {
         let self = this;
 
-        const xmin = d3.min( self.data, d => d.x );
+        //const xmin = d3.min( self.data, d => d.x );
         const xmax = d3.max( self.data, d => d.x );
         //self.xscale.domain( [xmin, xmax] );
         self.xscale.domain( [0, xmax] );
 
-        const ymin = d3.min( self.data, d => d.y );
+        //const ymin = d3.min( self.data, d => d.y );
         const ymax = d3.max( self.data, d => d.y );
         //self.yscale.domain( [ymin, ymax] );
         self.yscale.domain( [0, ymax] );
@@ -84,14 +82,31 @@ class LineChart {
       let self = this;
 
       const line = d3.line()
-                     .x( d => d.x )
-                     .y( d => d.y );
+                     .x( d => self.xscale(d.x) )
+                     .y( d => self.yscale(d.y) );
 
-      self.chart.selectAll("path")
-          .append("path")
-          .attr('d', line(data))
-          .attr('stroke', 'black')
-          .attr('fill', 'none');
+      const area = d3.area()
+                     .x( d => self.xscale(d.x) )
+                     .y1( d => self.yscale(d.y) )
+                     .y0( d3.max(self.data, d => d.y ) + 10 );//10はおそらくmargine
+
+      self.chart.append("path")
+                .datum(self.data)
+                .attr('d', line)
+                .attr('stroke', 'black')
+                .attr('fill', 'none')
+                .attr('d', area(self.data))
+                .attr('stroke', 'black')
+                .attr('fill', 'red')
+                .append('g');
+
+      self.chart.selectAll("circle")
+                .data(self.data)
+                .enter()
+                .append("circle")
+                .attr("cx", d => self.xscale( d.x ) )
+                .attr("cy", d => self.yscale( d.y ) )
+                .attr("r", 4 );
 
       self.xaxis_group
           .call( self.xaxis );
@@ -100,13 +115,3 @@ class LineChart {
           .call( self.yaxis );
   }
 }
-
-/*const area = d3.area()
-      .x( d => d.x )
-      .y1( d => d.y )
-      .y0( 0 );
-
-svg.append('path')
-    .attr('d', area(data))
-    .attr('stroke', 'black')
-    .attr('fill', 'black');*/
