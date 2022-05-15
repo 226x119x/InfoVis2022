@@ -1,6 +1,6 @@
-d3.csv("https://226x119x.github.io/InfoVis2022/W08/w08_task3.csv")
+d3.csv("https://226x119x.github.io/InfoVis2022/W08/w08_task1.csv")
     .then( data => {
-        data.forEach( d => { d.label = d.label; d.value = +d.value;  d.color = d.color; });
+        data.forEach( d => { d.label = d.label; d.value = +d.value; d.color = d.color; });
 
         var config = {
             parent: '#drawing_region',
@@ -61,23 +61,27 @@ class PieChart {
                     .innerRadius(self.config.radius / 2)//ドーナツチャート
                     .outerRadius(self.config.radius);
 
+      var color = d3.scaleOrdinal(['#4daf4a','#377eb8','#ff7f00','#984ea3','#e41a1c']);
+
       self.chart.selectAll("pie")
           .data( pie(self.data) )
           .enter()
           .append("path")
           .attr('d', arc)
-          .attr('fill', d => color(d.color) )
+          .attr("fill", function(d, i) {
+            return color(i);
+        })
           .attr('stroke', 'white')
           .style('stroke-width', '2px');
 
-      self.chart.selectAll('text')
-          .data(arc)
+      /*self.chart.selectAll('text')
+          .data(self.data)
           .enter()
           .append('text')
           .attr('transform', d => `translate(${arc.centroid(d)})`)
           .style("text-anchor", "middle")
           .style("font-size", 20)
           .style('fill', 'black')
-          .text(d => d.label) // 表示するテキスト;
+          .text(d => d.label) // 表示するテキスト;*/
   }
 }
