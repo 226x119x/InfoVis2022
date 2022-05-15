@@ -1,6 +1,6 @@
 d3.csv("https://226x119x.github.io/InfoVis2022/W08/w08_task1.csv")
     .then( data => {
-        data.forEach( d => { d.label = d.label; d.value = +d.value; d.color = d.color; });
+        data.forEach( d => { d.label = d.label; d.value = +d.value; });
 
         var config = {
             parent: '#drawing_region',
@@ -78,7 +78,9 @@ class PieChart {
           .data(self.data)
           .enter()
           .append('text')
-          .attr('transform', d => `translate(${arc.centroid(d)})`)
+          .attr('transform', function(d) {
+                        return "translate(" + arc.centroid(d) + ")";
+                })
           .style("text-anchor", "middle")
           .style("font-size", 20)
           .style('fill', 'black')
