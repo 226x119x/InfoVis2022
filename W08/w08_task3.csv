@@ -1,6 +1,6 @@
 label,value,color
-Apple,100,red
-Banana,200,yellow
-Cookie,50,brown
-Doughnut,120,orange
-Egg,80,white
+Apple,100,#00FFFF
+Banana,200,#00FFFF
+Cookie,50,#00FFFF
+Doughnut,120,#00FFFF
+Egg,80,#00FFFF

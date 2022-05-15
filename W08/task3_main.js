@@ -1,4 +1,4 @@
-d3.csv("https://226x119x.github.io/InfoVis2022/W08/w08_task1.csv")
+d3.csv("https://226x119x.github.io/InfoVis2022/W08/w08_task3.csv")
     .then( data => {
         data.forEach( d => { d.label = d.label; d.value = +d.value;  d.color = d.color; });
 
@@ -44,42 +44,10 @@ class PieChart {
 
       self.inner_width = self.config.width - self.config.margin.left - self.config.margin.right;
       self.inner_height = self.config.height - self.config.margin.top - self.config.margin.bottom;
-
-      self.xscale = d3.scaleLinear()
-          .range( [0, self.inner_width] );//scaleいらなくね？
-
-      self.yscale = d3.scaleLinear()
-          .range( [0, self.inner_height] );
-
-      /*self.xaxis = d3.axisBottom( self.xscale )
-          .ticks(17);
-
-      self.yaxis = d3.axisLeft( self.yscale )
-          .ticks(8);
-
-      self.xaxis_group = self.chart.append('g')
-          .attr('transform', `translate(0, ${self.inner_height})`);
-
-      self.yaxis_group = self.chart.append('g')
-          .attr('transform', `translate(0, 0)`);
-
-      self.label_text = self.chart.append('g')
-          .attr('transform', `translate(0, 0)`);*/
   }
 
   update() {
         let self = this;
-
-        //const xmin = d3.min( self.data, d => d.x );
-        const xmax = d3.max( self.data, d => d.x );
-        //self.xscale.domain( [xmin, xmax] );
-        self.xscale.domain( [0, xmax] );
-
-        //const ymin = d3.min( self.data, d => d.y );
-        const ymax = d3.max( self.data, d => d.y );
-        //self.yscale.domain( [ymin, ymax] );
-        self.yscale.domain( [0, ymax] );
-
         self.render();
   }
 
@@ -111,21 +79,5 @@ class PieChart {
           .style("font-size", 20)
           .style('fill', 'black')
           .text(d => d.label) // 表示するテキスト;
-
-      /*self.chart.selectAll('text')
-                .data(self.data)
-                .enter()
-                .append("text")
-                .attr("fill", "white")
-                .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-                .attr("dy", "5px")
-                .attr("text-anchor", "middle")
-                .text(function(d) { return d.label; });*/
-
-      /*self.xaxis_group
-          .call( self.xaxis );
-
-      self.yaxis_group
-          .call( self.yaxis );*/
   }
 }
