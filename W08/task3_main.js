@@ -61,29 +61,28 @@ class PieChart {
                     .innerRadius(self.config.radius / 2)//ドーナツチャート
                     .outerRadius(self.config.radius);
 
-      var color = d3.scaleOrdinal(['#4daf4a','#377eb8','#ff7f00','#984ea3','#e41a1c']);
+      var color = d3.scaleOrdinal()
+                    .domain(self.data)
+                    .range(d3.schemeSet2);
 
       self.chart.selectAll("pie")
           .data( pie(self.data) )
           .enter()
           .append("path")
           .attr('d', arc)
-          .attr("fill", function(d, i) {
-            return color(i);
+          .attr("fill", function(d) {
+            return color(d.data.label);
         })
           .attr('stroke', 'white')
           .style('stroke-width', '2px');
 
-      /*self.chart.selectAll('text')
-          .data(self.data)
-          .enter()
-          .append('text')
-          .attr('transform', function(d) {
-                        return "translate(" + arc.centroid(d) + ")";
-                })
-          .style("text-anchor", "middle")
-          .style("font-size", 20)
-          .style('fill', 'black')
-          .text(d => d.label) // 表示するテキスト;*/
+      self.chart.selectAll('text')
+                .data( pie(self.data) )
+                .enter()
+                .append('text')
+                .text(function(d){ return d.data.label})
+                .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")";  })
+                .style("text-anchor", "middle")
+                .style("font-size", 15)
   }
 }
