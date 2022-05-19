@@ -1,4 +1,4 @@
-d3.csv("https://226x119x.github.io/InfoVis2022/W08/w08_task2.csv")
+d3.csv("https://226x119x.github.io/InfoVis2022/W10/w10_task2.csv")
     .then( data => {
         data.forEach( d => { d.x = +d.x; d.y = +d.y; });
 
@@ -11,25 +11,6 @@ d3.csv("https://226x119x.github.io/InfoVis2022/W08/w08_task2.csv")
 
         const line_chart = new LineChart( config, data );
           line_chart.update();
-
-        function update(data) {
-            let padding = 10;
-            let height = 20;
-            svg.selectAll("rect")
-               .data(data)
-               .join("rect")
-               .attr("x", padding)
-               .attr("y", (d,i) => padding + i * ( height + padding ))
-               .attr("width", d => d)
-               .attr("height", height);
-             }
-
-         d3.select('#reverse')
-           .on('click', d => {
-               data.reverse();
-               update(data);
-           });
-
     })
     .catch( error => {
         console.log( error );
@@ -109,23 +90,13 @@ class LineChart {
                      .y1( d => self.yscale(d.y) )
                      .y0( d3.max(self.data, d => d.y ) + 10 );//10はおそらくmargine
 
-      self.chart.append("path")
-                .datum(self.data)
-                .attr('d', line)
-                .attr('stroke', 'black')
-                .attr('fill', 'none')
-                .attr('d', area(self.data))
-                .attr('stroke', 'black')
-                .attr('fill', 'red')
-                .append('g');
-
       self.chart.selectAll("circle")
                 .data(self.data)
                 .enter()
                 .append("circle")
                 .attr("cx", d => self.xscale( d.x ) )
                 .attr("cy", d => self.yscale( d.y ) )
-                .attr("r", 4 );
+                .attr("r", 10 );
 
       self.xaxis_group
           .call( self.xaxis );
