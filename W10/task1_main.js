@@ -63,6 +63,10 @@ class ScatterPlot {
 
         self.label_text = self.chart.append('g')
             .attr('transform', `translate(0, 0)`);
+
+        self.color = d3.scaleOrdinal()
+                       .domain(self.data)
+                       .range(d3.schemeCategory10);
     }
 
     update() {
@@ -85,12 +89,31 @@ class ScatterPlot {
                   .attr("x", 0 )
                   .attr("y", d => self.yscale(d.label) )
                   .attr("width", d => self.xscale(d.value))
-                  .attr("height", self.yscale.bandwidth());
+                  .attr("height", self.yscale.bandwidth())
+                  .attr("fill", function(d) {
+                    return self.color(d.label);
+                  });
 
                   d3.select('#reverse')
                       .on('click', d => {
                           self.data.reverse();
                           self.update();
+                      });
+
+                  d3.select('#descend')
+                      .on('click', d => {
+                        self.data.sort(function(a, b) {
+                          return b.value- a.value;
+                        });
+                        self.update();
+                      });
+
+                  d3.select('#ascend')
+                      .on('click', d => {
+                        self.data.sort(function(a, b) {
+                          return a.value- b.value;
+                        });
+                        self.update();
                       });
 
         self.xaxis_group
