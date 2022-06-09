@@ -81,6 +81,7 @@ class AreaChart {
 
     update() {
         let self = this;
+        var x0;
 
         self.xscale1.domain([
           // データ内の日付の最小値を取得
@@ -120,7 +121,8 @@ class AreaChart {
 
         self.brush = d3.brushX()
                        .extent([[0,0], [self.inner_width, self.inner_height2]])
-                       .on("brush end", brushed);
+                       .on("brush", brushed)
+                       .on("end", record);
 
         self.zoom = d3.zoom()
                       .scaleExtent([1, 1000])
@@ -153,6 +155,17 @@ class AreaChart {
           sourceEvent = null;
         }
 
+        function record(event) {
+          if (sourceEvent === "zoom") return; // ignore brush-by-zoom
+          sourceEvent = "end";
+          var s = event.selection || self.xscale2.range();
+          if(s){
+            self.x0 = s.map(self.xscale2.invert, self.xscale2)
+            console.log("check1",self.x0)
+          }
+          sourceEvent = null;
+        }
+
         function zoomed(event) {
           if (sourceEvent === "brush") return; // ignore zoom-by-brush
           sourceEvent = "zoom";
@@ -166,6 +179,11 @@ class AreaChart {
 
     }
 
+    coordinate(){
+      let self = this;
+      return self.x0;
+    }
+
     render() {
         let self = this;
 
@@ -174,14 +192,6 @@ class AreaChart {
                 .attr("class", "area")
                 .attr("d", self.area1)
                 .attr('fill', 'steelblue');
-      self.focus.append("g")
-                .append("path")
-                .datum(self.data)
-                .attr("class", "area")
-                .attr('d', self.line)
-                .attr('stroke', 'black')
-                .attr('fill', 'none')
-                .attr('stroke', 'black');
       self.focus.append("g")
                 .attr("class", "axis axis--x")
                 .attr("transform", "translate(0," + self.inner_height1 + ")")

@@ -1,5 +1,5 @@
 //方針：引数で二つconfigを取ってくるようにして，二つのlinechartを描画
-class LineChart {
+class BarChart {
     constructor (config, data) {
         this.config = {
             parent: config.parent,
@@ -36,7 +36,7 @@ class LineChart {
             .range([self.inner_height, 0]);
 
         self.xaxis = d3.axisBottom(self.xscale)
-            .tickFormat(d3.timeFormat("%Y/%m"));
+            .tickFormat(d3.timeFormat("%Y"));
 
         self.yaxis = d3.axisLeft(self.yscale);
 
@@ -69,9 +69,9 @@ class LineChart {
 
         self.xscale.domain([
           // データ内の日付の最小値を取得
-          d3.min(self.data, function(d){return d.date;}),
+          d3.min(self.data, function(d){return d.year;}),
           // データ内の日付の最大値を取得
-          d3.max(self.data, function(d){return d.date;})
+          d3.max(self.data, function(d){return d.year;})
         ]);
         self.yscale.domain([
           // 0を最小値として設定
@@ -80,9 +80,10 @@ class LineChart {
           d3.max(self.data, function(d){return d.exchangerate;})
         ]);
 
-        self.line = d3.line()
-                       .x(function(d) { return self.xscale(d.date); })
-                       .y(function(d) { return self.yscale(d.exchangerate); });
+        console.log("slicelog", self.data.columns)
+
+        self.stack = d3.stack()
+                       .keys(["amount"])(self.data);
 
         self.render();
     }
@@ -90,19 +91,29 @@ class LineChart {
     render() {
         let self = this;
 
+        var svgHeight = 240; // svg要素の高さ
+	      var barWidth  =  50; // 棒グラフの横幅
+	      var step = 80;		 // 棒グラフの横の間隔
+	      var offsetX = 10;	 // Ｘ座標のずれ
+
       /*
       const area = d3.area()
-                     .x( d => self.xscale1(d.date) )
+                     .x( d => self.xscale1(d.year) )
                      .y1( d => self.yscale1(d.price) )
                      .y0( d3.max(self.data, d => d.price ) + 10 );//10はおそらくmargine
       */
 
-      self.chart.append("path")
-                .datum(self.data)
-                .attr('d', self.line)
-                .attr('stroke', 'red')
-                .attr('fill', 'none')
-                .append('g');
+      self.chart.selectAll("g")
+                .data( self.stack )
+                .join("g")
+        .attr("fill", "red")
+      .selectAll("rect")
+      .data(d => d)
+      .join("rect")
+        .attr("x", (d, i) => self.xscale(d.data.year))
+        .attr("y", d => self.yscale(d[1]))
+        .attr("height", d => self.yscale(d[0]) - self.yscale(d[1]))
+        .attr("width", self.xscale.bandwidth());
 
         self.xaxis_group
             .call(self.xaxis);

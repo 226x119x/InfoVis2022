@@ -1,7 +1,9 @@
 let price_data;
 let rate_data;
+let amount_data;
 let area_chart;
 let line_chart;
+let bar_chart;
 let x_coordinate;
 
 const color_scale = d3.scaleOrdinal( d3.schemeCategory10 );
@@ -49,6 +51,7 @@ d3.csv("https://226x119x.github.io/InfoVis2022/FinalTask/gold_rate.csv")
         console.log( error );
     });
 
+    //データを読み込み代入：rate
     d3.csv("https://226x119x.github.io/InfoVis2022/FinalTask/gold_rate.csv")
     .then( data => {
        rate_data = data;
@@ -66,6 +69,40 @@ d3.csv("https://226x119x.github.io/InfoVis2022/FinalTask/gold_rate.csv")
             cscale: color_scale
         }, rate_data, );
         line_chart.update();
+    })
+    .catch( error => {
+        console.log( error );
+    });
+
+    //データを読み込み代入：amount
+    d3.csv("https://226x119x.github.io/InfoVis2022/FinalTask/gold_amount.csv")
+    .then( data => {
+       amount_data = data;
+       amount_data.forEach( d => {
+           d.year = parseTime2(d.year);
+           d.United_States = d.United_States;
+           d.Australia = +d.Australia;
+           d.Canada = +d.Canada;
+           d.China = +d.China;
+           d.Ghana = +d.Ghana;
+           d.Indonesia = +d.Indonesia;
+           d.Mexico = +d.Mexico;
+           d.Peru = +d.Peru;
+           d.Russia = +d.Russia;
+           d.South_Africa = +d.South_Africa;
+           d.Uzbekistan = +d.Uzbekistan;
+        });
+        console.log(amount_data)
+
+        bar_chart = new BarChart( {
+            parent: '#drawing_region_linechart',
+            width: 256,
+            height: 256,
+            margin: {top:10, right:10, bottom:50, left:50},
+            xlabel: 'Species',
+            cscale: color_scale
+        }, amount_data, );
+        bar_chart.update();
     })
     .catch( error => {
         console.log( error );

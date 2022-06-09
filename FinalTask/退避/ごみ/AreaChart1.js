@@ -113,15 +113,15 @@ class AreaChart1 {
 
         self.area1 = d3.area()
                       //.curve(d3.curveMonotoneX)
-                      .x(self.data_price, function(d) { return self.xscale1(d.date); })
+                      .x(function(d) { return self.xscale1(d.date); })
                       .y0(self.inner_height1)
-                      .y1(self.data_price, function(d) { return self.yscale1(d.price); });
+                      .y1(function(d) { return self.yscale1(d.price); });
 
         self.area2 = d3.area()
                        //.curve(d3.curveMonotoneX)
-                       .x(self.data_price, function(d) { return self.xscale2(d.date); })
+                       .x(function(d) { return self.xscale2(d.date); })
                        .y0(self.inner_height2)
-                       .y1(self.data_price, function(d) { return self.yscale2(d.price); });
+                       .y1(function(d) { return self.yscale2(d.price); });
 
         self.line = d3.line()
                       .x(self.data_rate, function(d) { return self.xscale1(d.date); })
