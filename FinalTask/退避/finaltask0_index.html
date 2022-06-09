@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <title>FinalTask: Visualization</title>
+  <style>
+  body {
+  	     font-family: system-ui;
+  	 }
+     .container {
+	     display: flex;
+	    }
+	   .bar.active {
+	     stroke: #000;
+	   }
+     .area {
+       clip-path: url(#clip);
+     }
+
+     .zoom {
+       cursor: move;
+       fill: none;
+       pointer-events: all;
+     }
+   </style>
+    </head>
+    <body>
+	<h2>Iris Flower Dataset</h2>
+	<div class="container">
+	    <div><svg id="drawing_region_areachart"></svg></div>
+      <div><svg id="drawing_region_linechart"></svg></div>
+	</div>
+	<script src="https://d3js.org/d3.v6.min.js"></script>
+	<script src="AreaChart1.js"></script>
+  <script src="LineChart.js"></script>
+	<script src="finaltask0_main.js"></script>
+    </body>
+</html>
