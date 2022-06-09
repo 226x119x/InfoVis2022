@@ -113,19 +113,19 @@ class AreaChart1 {
 
         self.area1 = d3.area()
                       //.curve(d3.curveMonotoneX)
-                      .x(function(d) { return self.xscale1(d.date); })
+                      .x(self.data_price, function(d) { return self.xscale1(d.date); })
                       .y0(self.inner_height1)
-                      .y1(function(d) { return self.yscale1(d.price); });
+                      .y1(self.data_price, function(d) { return self.yscale1(d.price); });
 
         self.area2 = d3.area()
                        //.curve(d3.curveMonotoneX)
-                       .x(function(d) { return self.xscale2(d.date); })
+                       .x(self.data_price, function(d) { return self.xscale2(d.date); })
                        .y0(self.inner_height2)
-                       .y1(function(d) { return self.yscale2(d.price); });
+                       .y1(self.data_price, function(d) { return self.yscale2(d.price); });
 
         self.line = d3.line()
-                      .x(function(d) { return self.xscale1(d.date); })
-                      .y(function(d) { return self.yscale1_rate(d.exchangerate); });
+                      .x(self.data_rate, function(d) { return self.xscale1(d.date); })
+                      .y(self.data_rate, function(d) { return self.yscale1_rate(d.exchangerate); });
 
         self.brush = d3.brushX()
                        .extent([[0,0], [self.inner_width, self.inner_height2]])
