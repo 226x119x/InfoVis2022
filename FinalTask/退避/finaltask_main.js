@@ -38,7 +38,7 @@ d3.csv("https://226x119x.github.io/InfoVis2022/FinalTask/gold_rate.csv")
 
         area_chart = new AreaChart( {
             parent: '#drawing_region_areachart',
-            width: 960,
+            width: 900,
             height: 500,
             margin1: {top:20, right:20, bottom:110, left:40},
             margin2: {top:430, right:20, bottom:30, left:40},
@@ -80,7 +80,7 @@ d3.csv("https://226x119x.github.io/InfoVis2022/FinalTask/gold_rate.csv")
        amount_data = data;
        amount_data.forEach( d => {
            d.year = parseTime2(d.year);
-           d.United_States = d.United_States;
+           d.United_States = +d.United_States;
            d.Australia = +d.Australia;
            d.Canada = +d.Canada;
            d.China = +d.China;
@@ -95,7 +95,7 @@ d3.csv("https://226x119x.github.io/InfoVis2022/FinalTask/gold_rate.csv")
         console.log(amount_data)
 
         bar_chart = new BarChart( {
-            parent: '#drawing_region_linechart',
+            parent: '#drawing_region_barchart',
             width: 256,
             height: 256,
             margin: {top:10, right:10, bottom:50, left:50},
@@ -113,6 +113,7 @@ d3.csv("https://226x119x.github.io/InfoVis2022/FinalTask/gold_rate.csv")
         .on('click', function(){
           x_coordinate = area_chart.coordinate();
           line_chart.replot(x_coordinate);
+          bar_chart.replot(x_coordinate);
         });
 
 //開発予定地

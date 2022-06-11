@@ -1,6 +1,6 @@
 //方針：引数で二つconfigを取ってくるようにして，二つのlinechartを描画
-class BarChart {
-    constructor (config, data) {
+class BarChart0 {
+    constructor (config, data, chart, xscale) {
         this.config = {
             parent: config.parent,
             width: config.width || 256,
@@ -11,6 +11,9 @@ class BarChart {
             cscale: config.cscale
         };
         this.data = data;
+        this.chart = chart;
+        this.xscale = xscale;
+        this.plot_flag = 1;
         this.init();
     }
 
@@ -18,12 +21,14 @@ class BarChart {
         let self = this;
 
         //描画領域
+        /*
         self.svg = d3.select(self.config.parent)
             .attr('width', self.config.width)
             .attr('height', self.config.height);
 
         self.chart = self.svg.append('g')
             .attr('transform', `translate(${self.config.margin.left}, ${self.config.margin.top})`);
+        */
 
         //グループ
         self.countries = self.data.columns.slice(1)
@@ -35,8 +40,8 @@ class BarChart {
         self.inner_width = self.config.width - self.config.margin.left - self.config.margin.right;
         self.inner_height = self.config.height - self.config.margin.top - self.config.margin.bottom;
 
-        self.xscale = d3.scaleTime()
-            .range([0, self.inner_width]);
+        //self.xscale = d3.scaleTime()
+        //    .range([0, self.inner_width]);
 
         self.yscale = d3.scaleLinear()
             .range([self.inner_height, 0]);
@@ -50,9 +55,10 @@ class BarChart {
         self.xaxis_group = self.chart.append('g')
             .attr('transform', `translate(0, ${self.inner_height})`);
 
-        self.yaxis_group = self.chart.append('g');
+        self.yaxis_group = self.chart.append('g')
+            .attr('transform', `translate(${self.inner_width + 7}, 0)`);
 
-        self.color = d3.scaleOrdinal( d3.schemeCategory10 )
+        self.color = d3.scaleOrdinal( d3.schemeSet3 )
                        .domain(self.countries);
                        //.range(["red", "yellow", "blue"]);
 
@@ -64,33 +70,39 @@ class BarChart {
             .attr("x", 0)
             .attr("y", 0);
 
+
         /*const xlabel_space = 40;
         self.svg.append('text')
             .style('font-size', '12px')
             .attr('x', self.config.width / 2)
             .attr('y', self.inner_height + self.config.margin.top + xlabel_space)
-            .text( self.config.xlabel );
+            .text( self.config.xlabel );*/
 
-        const ylabel_space = 50;
-        self.svg.append('text')
-            .style('font-size', '12px')
-            .attr('transform', `rotate(-90)`)
-            .attr('y', self.config.margin.left - ylabel_space)
-            .attr('x', -(self.config.height / 2))
-            .attr('text-anchor', 'middle')
-            .attr('dy', '1em')
-            .text( self.config.ylabel );*/
+         self.text_group = self.chart.append("g");
+         /*
+         self.chart.append('text')
+             .style('font-size', '15px')
+             .attr('transform', `rotate(90)`)
+             .attr('y', -(self.inner_width + 27))
+             .attr('x', self.config.width / 4 - 50)
+             .attr('text-anchor', 'middle')
+             .attr('dy', '1em')
+             .text( self.config.ylabel );
+             */
     }
 
     update() {
         let self = this;
 
+        /*
         self.xscale.domain([
           // データ内の日付の最小値を取得
           d3.min(self.years),
           // データ内の日付の最大値を取得
           d3.max(self.years)
         ]);
+        */
+
         self.yscale.domain([0,2300
           //d3.max(self.data, function(d){return d.United_States + d.Australia + d.Canada + d.China + d.Ghana + d.Indonesia + d.Mexico + d.Perud + d.Russia + d.South_Africa + d.Uzbekistan;})
         ]);
@@ -114,6 +126,36 @@ class BarChart {
                      .y0( d3.max(self.data, d => d.price ) + 10 );//10はおそらくmargine
       */
 
+      /*
+      const tooltip = d3.select(self.config.parent)
+          .append("div")
+          .style("opacity", 0)
+          .attr("class", "tooltip")
+          .style("background-color", "white")
+          .style("border", "solid")
+          .style("border-width", "1px")
+          .style("border-radius", "5px")
+          .style("padding", "10px");*/
+
+      const mouseover = function(event, d) {
+      const subgroupName = d3.select(this.parentNode).datum().key;
+      const subgroupValue = d.data[subgroupName];
+      d3.select('#tooltip')
+          //.html("Country: " + subgroupName + "<br>" + "Production: " + subgroupValue)
+          .html(`<div class="tooltip-label">${subgroupName}</div>Production: ${subgroupValue}`)
+          .style("opacity", 1);
+
+      }
+      const mousemove = function(event, d) {
+        d3.select('tooltip')
+               .style("transform","translateY(-55%)")
+               .style("left",(event.x)/2+"px")
+               .style("top",(event.y)/2-30+"px");
+      }
+      //const mouseleave = function(event, d) {
+      //  d3.select('tooltip')
+      //   .style("opacity", 0);
+      //}
 
       self.chart.append("g")
                 .attr("clip-path", "url(#clip)")
@@ -129,7 +171,29 @@ class BarChart {
                 .attr("x", d => self.xscale(d.data.year))
                 .attr("y", d => self.yscale(d[1]))
                 .attr("height", d => self.yscale(d[0]) - self.yscale(d[1]))
-                .attr("width",10);
+                .attr("width",80)
+                .attr("stroke", "grey")
+                .on("mouseover", mouseover)
+                .on('mousemove', (e) => {
+                const padding = 10;
+                d3.select('#tooltip')
+                    .style('left', (e.pageX + padding) + 'px')
+                    .style('top', (e.pageY + padding) + 'px');
+                })
+                .on('mouseleave', () => {
+                d3.select('#tooltip')
+                    .style('opacity', 0);
+                });
+
+      self.text_group.append('text')
+          .attr("class", "text")
+          .style('font-size', '15px')
+          .attr('transform', `rotate(90)`)
+          .attr('y', -(self.inner_width + 27))
+          .attr('x', self.config.width / 4 - 50)
+          .attr('text-anchor', 'middle')
+          .attr('dy', '1em')
+          .text( self.config.ylabel );
 
                 /*
                 self.chart.append("g")
@@ -148,19 +212,51 @@ class BarChart {
         //.attr("width",self.xscale.bandwidth());
         */
 
+        /*
         self.xaxis_group
             .call(self.xaxis);
+        */
 
-        self.yaxis_group
+        self.yaxis_group.append("g")
+            .attr("class", "axis axis--y")
             .call(self.yaxis);
     }
 
     replot(coordinate){
       let self = this;
-      console.log(coordinate)
-      self.xscale.domain(coordinate);
-      self.chart.selectAll(".bar")
-                .remove();
-      self.render();
+
+      if(self.plot_flag == 1){
+        console.log(coordinate)
+        //self.xscale.domain(coordinate);
+        //xscale関係いらんかも
+        self.chart.selectAll(".bar")
+                  .remove();
+        self.render();
+      }
+        else{
+          //self.xscale.domain(coordinate);
+        }
+    }
+
+    display(){
+      let self = this;
+
+      if(self.plot_flag == 1){
+        self.chart.selectAll(".bar")
+                  .remove();
+
+        self.text_group.selectAll(".text")
+                  .remove();
+
+        self.yaxis_group.select(".axis--y")
+                  .remove();
+
+        self.plot_flag = 0;
+      }
+      else{
+        self.render();
+
+        self.plot_flag = 1;
+      }
     }
 }

@@ -36,7 +36,7 @@ class LineChart {
             .range([self.inner_height, 0]);
 
         self.xaxis = d3.axisBottom(self.xscale)
-            .tickFormat(d3.timeFormat("%Y/%m"));
+            .tickFormat(d3.timeFormat("%Y"));
 
         self.yaxis = d3.axisLeft(self.yscale);
 
@@ -45,6 +45,14 @@ class LineChart {
             .attr('transform', `translate(0, ${self.inner_height})`);
 
         self.yaxis_group = self.chart.append('g');
+
+        self.clip = self.chart.append("defs").append("svg:clipPath")
+        .attr("id", "clip")
+        .append("svg:rect")
+        .attr("width", self.inner_width )
+        .attr("height", self.inner_height )
+        .attr("x", 0)
+        .attr("y", 0);
 
         /*const xlabel_space = 40;
         self.svg.append('text')
@@ -97,8 +105,11 @@ class LineChart {
                      .y0( d3.max(self.data, d => d.price ) + 10 );//10はおそらくmargine
       */
 
-      self.chart.append("path")
+      self.chart.append("g")
+                .attr("clip-path", "url(#clip)")
+                .append("path")
                 .datum(self.data)
+                .attr('class', 'line')
                 .attr('d', self.line)
                 .attr('stroke', 'red')
                 .attr('fill', 'none')
@@ -115,8 +126,14 @@ class LineChart {
       let self = this;
       console.log(coordinate)
       self.xscale.domain(coordinate);
-      self.chart.selectAll("path")
-                .remove();
-      self.render();
+      self.chart.select(".line")
+      .attr("d", d3.line()
+                   .x(function(d) { return self.xscale(d.date) })
+                   .y(function(d) { return self.yscale(d.exchangerate) })
+           )
+           
+      self.xaxis_group
+          .call(self.xaxis);
+      //self.render();
     }
 }
