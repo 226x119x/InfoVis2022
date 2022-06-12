@@ -1,5 +1,4 @@
-//方針：引数で二つconfigを取ってくるようにして，二つのlinechartを描画
-class AreaChart0 {
+class AreaChart {
     constructor (config, data) {
         this.config = {
             parent: config.parent,
@@ -26,7 +25,7 @@ class AreaChart0 {
             .attr('transform', `translate(${self.config.margin1.left}, ${self.config.margin1.top})`);
 
         //上位グラフ
-        self.inner_width = self.config.width - self.config.margin1.left - self.config.margin1.right - 240;
+        self.inner_width = self.config.width - self.config.margin1.left - self.config.margin1.right - 140;
         self.inner_height1 = self.config.height - self.config.margin1.top - self.config.margin1.bottom;
         self.inner_height2 = self.config.height - self.config.margin2.top - self.config.margin2.bottom;
 
@@ -48,7 +47,6 @@ class AreaChart0 {
 
         self.yaxis = d3.axisLeft(self.yscale1);
 
-        //!!!!
         self.xaxis_group = self.chart.append('g')
             .attr('transform', `translate(0, ${self.inner_height1})`);
 
@@ -83,27 +81,40 @@ class AreaChart0 {
             self.svg.append("line")
             .attr("x1",self.inner_width + 60)
             .attr("x2",self.inner_width + 80)
-            .attr("y1",self.inner_height1 + 59)
-            .attr("y2",self.inner_height1 + 59)
+            .attr("y1",self.inner_height1 + 49)
+            .attr("y2",self.inner_height1 + 49)
             .attr("stroke-width",2)
             .style("stroke", "blue");
             self.svg.append("line")
             .attr("x1",self.inner_width + 60)
             .attr("x2",self.inner_width + 80)
-            .attr("y1",self.inner_height1 + 89)
-            .attr("y2",self.inner_height1 + 89)
+            .attr("y1",self.inner_height1 + 79)
+            .attr("y2",self.inner_height1 + 79)
             .attr("stroke-width",2)
             .style("stroke", "red");
+            self.svg.append("rect")
+            .attr("x",self.inner_width + 65)
+            .attr("y",self.inner_height1 + 103)
+            .attr("width",10)
+            .attr("height",10)
+            .attr("fill","steelblue");
+
             self.svg.append("text")
             .attr("x", self.inner_width + 90)
-            .attr("y", self.inner_height1 + 60)
+            .attr("y", self.inner_height1 + 50)
             .text("Gold_Price")
             .style("font-size", "15px")
             .attr("alignment-baseline","middle");
             self.svg.append("text")
             .attr("x", self.inner_width + 90)
-            .attr("y", self.inner_height1 + 90)
+            .attr("y", self.inner_height1 + 80)
             .text("Gold_Exchangerate")
+            .style("font-size", "15px")
+            .attr("alignment-baseline","middle");
+            self.svg.append("text")
+            .attr("x", self.inner_width + 90)
+            .attr("y", self.inner_height1 + 110)
+            .text("No. of positive cases")
             .style("font-size", "15px")
             .attr("alignment-baseline","middle");
     }
@@ -123,7 +134,7 @@ class AreaChart0 {
         self.yscale1.domain([
           // 0を最小値として設定
           0,
-          // データ内のvalueの最大値を取得
+          // データ内のpriceの最大値を取得
           d3.max(self.data, function(d){return d.price;})
         ]);
         self.yscale2.domain(self.yscale1.domain());
@@ -172,7 +183,7 @@ class AreaChart0 {
         var sourceEvent = null;
 
         function brushed(event) {
-          if (sourceEvent === "zoom") return; // ignore brush-by-zoom
+          if (sourceEvent === "zoom") return;
           sourceEvent = "brush";
           var s = event.selection || self.xscale2.range();
           self.xscale1.domain(s.map(self.xscale2.invert, self.xscale2));
@@ -185,7 +196,7 @@ class AreaChart0 {
         }
 
         function record(event) {
-          if (sourceEvent === "zoom") return; // ignore brush-by-zoom
+          if (sourceEvent === "zoom") return;
           sourceEvent = "end";
           var s = event.selection || self.xscale2.range();
           if(s){
@@ -196,7 +207,7 @@ class AreaChart0 {
         }
 
         function zoomed(event) {
-          if (sourceEvent === "brush") return; // ignore zoom-by-brush
+          if (sourceEvent === "brush") return;
           sourceEvent = "zoom";
           var t = event.transform;
           self.xscale1.domain(t.rescaleX(self.xscale2).domain());
@@ -206,11 +217,6 @@ class AreaChart0 {
           sourceEvent = null;
         }
 
-    }
-
-    coordinate(){
-      let self = this;
-      return self.x0;
     }
 
     render() {
@@ -235,7 +241,7 @@ class AreaChart0 {
                   .datum(self.data)
                   .attr("class", "area")
                   .attr("d", self.area2)
-                  .attr('fill', 'steelblue');
+                  .attr('fill', 'blue');
       self.context.append("g")
                   .attr("class", "axis axis--x")
                   .attr("transform", "translate(0," + self.inner_height2 + ")")

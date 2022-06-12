@@ -1,42 +1,61 @@
 <html>
     <head>
         <title>FinalTask: Visualization</title>
-	<style>
-	 body {
-	     font-family: system-ui;
-	 }
-	 .container {
+  <style>
+  body {
+  	     font-family: system-ui;
+  	 }
+     .container {
 	     display: flex;
-	 }
-	 .bar.active {
+	    }
+	   .bar.active {
 	     stroke: #000;
-	 }
-	 #tooltip {
-	     position: absolute;
-	     opacity: 0;
-	     background: #fff;
-	     border: 1px solid #ddd;
-	     font-size: 12px;
-	     font-weight: 600;
-	     padding: 2px 8px;
-	 }
-	 .tooltip-label {
-	     font-weight: 500;
-	     font-size: 11px;
-	     color: #888;
-	 }
-	</style>
+	   }
+     .area {
+       clip-path: url(#clip);
+     }
+
+     .zoom {
+       cursor: move;
+       fill: none;
+       pointer-events: all;
+     }
+     #tooltip {
+      position: absolute;
+      opacity: 0;
+      background: #fff;
+      border: 1px solid #ddd;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      color: black;
+  }
+  .tooltip-label {
+      font-weight: 500;
+      font-size: 12px;
+      color: black;
+  }
+   </style>
     </head>
     <body>
-	<h2>Iris Flower Dataset</h2>
-	<div id="tooltip"></div>
+	<h2>Gold Dataset</h2>
+  <div id="tooltip"></div>
 	<div class="container">
-	    <div><svg id="drawing_region_scatterplot"></svg></div>
-	    <div><svg id="drawing_region_barchart"></svg></div>
+	    <div><svg id="drawing_region_areachart"></svg></div>
+      <div><svg id="drawing_region_linechart"></svg></div>
+      <div><svg id="drawing_region_barchart"></svg></div>
+	</div>
+  <div　class="buttons">
+    	<button class="button1" type="button" id="rink">Rink</button>
+      <button class="button2" type="button" id="exchangerate">Exchangerate</button>
+      <button class="button3" type="button" id="production">Production</button>
+      <button class="button4" type="button" id="covid19">Covid19</button>
 	</div>
 	<script src="https://d3js.org/d3.v6.min.js"></script>
-	<script src="w12_ex03_ScatterPlot.js"></script>
-	<script src="BarChart.js"></script>
+	<script src="AreaChart.js"></script>
+  <script src="LineChart.js"></script>
+  <script src="BarChart.js"></script>
+  <script src="BarChart2.js"></script>
 	<script src="finaltask_main.js"></script>
     </body>
 </html>
